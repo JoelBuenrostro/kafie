@@ -4,25 +4,35 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 require('dotenv').config();
 
+const config = require('./config/config');
+
 // Rutas
-const baseRoutes = require('./routes'); // Ruta base (ej: /api/)
-const authRoutes = require('./routes/auth.routes'); // Rutas de autenticación
-const productRoutes = require('./routes/product.routes'); // CRUD de productos
+const baseRoutes = require('./routes');
+const authRoutes = require('./routes/auth.routes');
+const productRoutes = require('./routes/product.routes');
 
 const app = express();
 
-// Middlewares globales
-app.use(cors()); // Permite peticiones desde otros dominios (como Netlify)
-app.use(helmet()); // Agrega cabeceras de seguridad HTTP
-app.use(morgan('dev')); // Logging de peticiones en desarrollo
-app.use(express.json()); // Parsea cuerpos JSON en peticiones
+// ---------------------------
+// Middlewares de seguridad
+// ---------------------------
+app.use(
+  cors({
+    origin: config.cors.origin,
+    credentials: true, // permite enviar cookies si se usan en el futuro
+  })
+);
 
-// Rutas del sistema
-app.use('/api', baseRoutes); // Ruta base: /api
-app.use('/api/auth', authRoutes); // Rutas públicas y protegidas de autenticación
-app.use('/api/products', productRoutes); // Rutas para productos
+app.use(helmet()); // Cabeceras de seguridad (XSS, sniffing, etc.)
+app.use(morgan('dev'));
+app.use(express.json());
 
-// Middleware 404 - Ruta no encontrada
+// Rutas
+app.use('/api', baseRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+
+// Ruta 404
 app.use((req, res) => {
   res.status(404).json({
     message: 'Ruta no encontrada',

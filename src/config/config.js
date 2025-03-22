@@ -11,7 +11,7 @@ const config = {
     version: '1.0.0',
   },
   cors: {
-    origin: '*', // o puedes limitarlo a tu frontend
+    origin: process.env.CORS_ORIGIN || '*',
   },
 };
 
