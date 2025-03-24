@@ -10,6 +10,7 @@ const config = require('./config/config');
 const baseRoutes = require('./routes');
 const authRoutes = require('./routes/auth.routes');
 const productRoutes = require('./routes/product.routes');
+const orderRoutes = require('./routes/order.routes');
 
 // Swagger
 const swaggerUi = require('swagger-ui-express');
@@ -37,6 +38,7 @@ app.use(express.json());
 app.use('/api', baseRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
 
 // ---------------------------
 // Documentación Swagger
