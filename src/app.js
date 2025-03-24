@@ -11,28 +11,41 @@ const baseRoutes = require('./routes');
 const authRoutes = require('./routes/auth.routes');
 const productRoutes = require('./routes/product.routes');
 
+// Swagger
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./docs/swagger');
+
 const app = express();
 
 // ---------------------------
-// Middlewares de seguridad
+// Middlewares globales
 // ---------------------------
 app.use(
   cors({
     origin: config.cors.origin,
-    credentials: true, // permite enviar cookies si se usan en el futuro
+    credentials: true,
   })
 );
 
-app.use(helmet()); // Cabeceras de seguridad (XSS, sniffing, etc.)
+app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 
-// Rutas
+// ---------------------------
+// Rutas API
+// ---------------------------
 app.use('/api', baseRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 
-// Ruta 404
+// ---------------------------
+// Documentación Swagger
+// ---------------------------
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// ---------------------------
+// Middleware 404
+// ---------------------------
 app.use((req, res) => {
   res.status(404).json({
     message: 'Ruta no encontrada',
