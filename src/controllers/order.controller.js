@@ -1,7 +1,7 @@
 const Order = require('../models/order.model');
 const Product = require('../models/product.model');
 
-// Crear un nuevo pedido
+// Crear un nuevo pedido con validación de stock
 const createOrder = async (req, res) => {
   try {
     const { items } = req.body;
@@ -23,6 +23,12 @@ const createOrder = async (req, res) => {
       const quantity = parseInt(item.quantity, 10);
       if (quantity <= 0) {
         return res.status(400).json({ message: 'Cantidad inválida en el pedido.' });
+      }
+
+      if (product.stock < quantity) {
+        return res.status(400).json({
+          message: `No hay stock suficiente para "${product.name}". Disponible: ${product.stock}`,
+        });
       }
 
       validatedItems.push({ product: product._id, quantity });
@@ -47,12 +53,11 @@ const createOrder = async (req, res) => {
   }
 };
 
-// Obtener todos los pedidos de un usuario
+// Obtener todos los pedidos de un usuario autenticado
 const getOrdersByUser = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    // Validar que el usuario autenticado está consultando su propio historial
     if (req.user.id !== userId) {
       return res.status(403).json({ message: 'No tienes permiso para ver estos pedidos.' });
     }
