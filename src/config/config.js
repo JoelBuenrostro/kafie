@@ -6,6 +6,7 @@ const config = {
   dbUrl: process.env.DB_URL,
   jwtSecret: process.env.JWT_SECRET,
   stripeSecret: process.env.STRIPE_SECRET_KEY,
+  stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
 
   app: {
     name: 'Kafie Backend API',
