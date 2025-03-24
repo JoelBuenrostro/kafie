@@ -1,7 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { createOrder } = require('../controllers/order.controller');
+
+const { createOrder, getOrdersByUser } = require('../controllers/order.controller');
+
 const authMiddleware = require('../middleware/auth.middleware');
+
+/**
+ * @swagger
+ * tags:
+ *   name: Orders
+ *   description: Endpoints para gestionar pedidos de café
+ */
 
 /**
  * @swagger
@@ -24,6 +33,9 @@ const authMiddleware = require('../middleware/auth.middleware');
  *                 type: array
  *                 items:
  *                   type: object
+ *                   required:
+ *                     - product
+ *                     - quantity
  *                   properties:
  *                     product:
  *                       type: string
@@ -35,7 +47,36 @@ const authMiddleware = require('../middleware/auth.middleware');
  *         description: Pedido creado exitosamente
  *       400:
  *         description: Error en los datos del pedido
+ *       401:
+ *         description: No autorizado
  */
 router.post('/', authMiddleware, createOrder);
+
+/**
+ * @swagger
+ * /orders/{userId}:
+ *   get:
+ *     summary: Obtener todos los pedidos de un usuario autenticado
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         required: true
+ *         description: ID del usuario
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Lista de pedidos del usuario
+ *       403:
+ *         description: No autorizado para ver estos pedidos
+ *       401:
+ *         description: No autorizado
+ *       500:
+ *         description: Error interno
+ */
+router.get('/:userId', authMiddleware, getOrdersByUser);
 
 module.exports = router;

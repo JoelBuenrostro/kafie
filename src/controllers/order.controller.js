@@ -1,6 +1,7 @@
 const Order = require('../models/order.model');
 const Product = require('../models/product.model');
 
+// Crear un nuevo pedido
 const createOrder = async (req, res) => {
   try {
     const { items } = req.body;
@@ -46,6 +47,28 @@ const createOrder = async (req, res) => {
   }
 };
 
+// Obtener todos los pedidos de un usuario
+const getOrdersByUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Validar que el usuario autenticado está consultando su propio historial
+    if (req.user.id !== userId) {
+      return res.status(403).json({ message: 'No tienes permiso para ver estos pedidos.' });
+    }
+
+    const orders = await Order.find({ user: userId })
+      .populate('items.product', 'name price')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({ orders });
+  } catch (error) {
+    console.error('❌ Error al obtener pedidos:', error);
+    res.status(500).json({ message: 'Error al obtener los pedidos' });
+  }
+};
+
 module.exports = {
   createOrder,
+  getOrdersByUser,
 };
