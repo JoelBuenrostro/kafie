@@ -14,6 +14,7 @@ const productRoutes = require('./routes/product.routes');
 const orderRoutes = require('./routes/order.routes');
 const paymentRoutes = require('./routes/payment.routes');
 const webhookRoutes = require('./routes/webhook.routes');
+const subscriptionRoutes = require('./routes/subscription.routes');
 
 // Swagger
 const swaggerUi = require('swagger-ui-express');
@@ -45,6 +46,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/webhooks', webhookRoutes); // Incluye ya /stripe internamente
+app.use('/api/subscriptions', subscriptionRoutes);
 
 // ---------------------------
 // Documentación Swagger
