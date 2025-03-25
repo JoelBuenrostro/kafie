@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { createContactMessage, getAllMessages } = require('../controllers/contact.controller');
+const {
+  createContactMessage,
+  getAllMessages,
+  markMessageAsResponded,
+} = require('../controllers/contact.controller');
 
 const authMiddleware = require('../middleware/auth.middleware');
 
@@ -52,5 +56,28 @@ router.post('/', createContactMessage);
  *         description: Lista de mensajes
  */
 router.get('/', authMiddleware, getAllMessages);
+
+/**
+ * @swagger
+ * /contact/{id}/respond:
+ *   patch:
+ *     summary: Marcar mensaje como respondido
+ *     tags: [Contact]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del mensaje a actualizar
+ *     responses:
+ *       200:
+ *         description: Mensaje actualizado
+ *       404:
+ *         description: Mensaje no encontrado
+ */
+router.patch('/:id/respond', authMiddleware, markMessageAsResponded);
 
 module.exports = router;

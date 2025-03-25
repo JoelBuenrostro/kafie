@@ -30,7 +30,35 @@ const getAllMessages = async (req, res) => {
   }
 };
 
+// Actualizar estado a 'respondido'
+const markMessageAsResponded = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const message = await ContactMessage.findById(id);
+    if (!message) {
+      return res.status(404).json({ message: 'Mensaje no encontrado.' });
+    }
+
+    if (message.status === 'respondido') {
+      return res.status(400).json({ message: 'Este mensaje ya ha sido marcado como respondido.' });
+    }
+
+    message.status = 'respondido';
+    await message.save();
+
+    res.status(200).json({
+      message: 'Mensaje marcado como respondido.',
+      updated: message,
+    });
+  } catch (error) {
+    console.error('Error al actualizar mensaje:', error);
+    res.status(500).json({ message: 'Error al actualizar el estado del mensaje.' });
+  }
+};
+
 module.exports = {
   createContactMessage,
   getAllMessages,
+  markMessageAsResponded,
 };
