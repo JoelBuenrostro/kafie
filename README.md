@@ -52,17 +52,17 @@ Incluye todos los endpoints con descripciones, parámetros y respuestas esperada
 
 ## 🔐 Rutas principales
 
-| Método | Ruta | Descripción |
-|--------|------|-------------|
-| `POST` | `/api/auth/register` | Registro de usuario |
-| `POST` | `/api/auth/login`    | Inicio de sesión |
-| `GET`  | `/api/products`      | Lista de productos |
-| `POST` | `/api/orders`        | Crear pedido |
-| `POST` | `/api/payments/checkout` | Iniciar pago con Stripe |
-| `POST` | `/api/subscriptions` | Crear suscripción |
-| `GET`  | `/api/contact`       | Ver mensajes (admin) |
-| `POST` | `/api/contact`       | Enviar mensaje |
-| `POST` | `/api/plans`         | Crear plan de suscripción (admin) |
+| Método | Ruta                     | Descripción                       |
+| ------ | ------------------------ | --------------------------------- |
+| `POST` | `/api/auth/register`     | Registro de usuario               |
+| `POST` | `/api/auth/login`        | Inicio de sesión                  |
+| `GET`  | `/api/products`          | Lista de productos                |
+| `POST` | `/api/orders`            | Crear pedido                      |
+| `POST` | `/api/payments/checkout` | Iniciar pago con Stripe           |
+| `POST` | `/api/subscriptions`     | Crear suscripción                 |
+| `GET`  | `/api/contact`           | Ver mensajes (admin)              |
+| `POST` | `/api/contact`           | Enviar mensaje                    |
+| `POST` | `/api/plans`             | Crear plan de suscripción (admin) |
 
 ---
 
