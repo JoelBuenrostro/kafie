@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "jest",
+    "test:basic": "jest src/tests/basic.test.js",
     "coverage": "jest --coverage"
   },
   "repository": {
