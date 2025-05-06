@@ -5,12 +5,11 @@ const config = require('../config/config');
 const User = require('../models/user.model');
 
 beforeAll(async () => {
-  // Conexión a base de datos de pruebas
   await mongoose.connect(config.dbUrl);
+  await User.deleteMany({});
 });
 
 afterAll(async () => {
-  await User.deleteMany({});
   await mongoose.connection.close();
 });
 
@@ -24,8 +23,10 @@ describe('🧪 AUTH - Registro e Inicio de Sesión', () => {
   it('debería registrar un nuevo usuario', async () => {
     const res = await request(app).post('/api/auth/register').send(userData);
     expect(res.statusCode).toBe(201);
-    expect(res.body).toHaveProperty('token');
     expect(res.body).toHaveProperty('user');
+    expect(res.body).toHaveProperty('message', 'Usuario registrado exitosamente');
+    expect(res.body.user.email).toBe(userData.email);
+    expect(res.body.user).not.toHaveProperty('password');
   });
 
   it('debería iniciar sesión correctamente', async () => {
@@ -44,5 +45,12 @@ describe('🧪 AUTH - Registro e Inicio de Sesión', () => {
       password: 'incorrecta',
     });
     expect(res.statusCode).toBe(401);
+  });
+
+  it('debería rechazar el registro de un usuario con email duplicado', async () => {
+    const res = await request(app).post('/api/auth/register').send(userData);
+    expect(res.statusCode).toBe(409);
+    expect(res.body).toHaveProperty('message');
+    expect(res.body.message).toBe('El email ya está registrado');
   });
 });
